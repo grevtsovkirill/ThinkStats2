@@ -47,11 +47,22 @@ def main(script):
     print("7-95 ",Npregs_7_95,"\nTotal = ",Npregs_tot)
 
 
-
-    dict_toPreg=nsfg.MakePregMap(respdf)
-    #print("dict_toPreg",dict_toPreg)
-    
-    #print('%s: All tests passed.' % script)
+    """
+    cross-validate the respondent and pregnancy files by comparing pregnum for each respondent
+    with the number of records in the pregnancy file.
+    """
+    pregdf=nsfg.ReadFemPreg()
+    map_ResptoPreg=nsfg.MakePregMap(pregdf)
+    fail=0
+    for index, pregnum in respdf.pregnum.iteritems(): 
+            #print("index",index,"pregnum",pregnum)
+        caseid = respdf.caseid[index]
+        indices = map_ResptoPreg[caseid]
+        if pregnum!=len(indices):
+            print("caseid in resp:",caseid,", pregnum=",pregnum," entries in preg= ",indices)
+            fail+=1
+    if fail==0:
+        print('%s: All tests passed.' % script)
     
 
 if __name__ == '__main__':
