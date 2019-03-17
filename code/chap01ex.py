@@ -22,6 +22,12 @@ def main(script):
     respdf=nsfg.ReadFemResp()
     #respdf.head()
     pregnum=respdf['pregnum']
+    """
+      The variable pregnum is a recode that indicates how many times each re- spondent has
+      been pregnant. Print the value counts for this variable and compare them to the 
+      published results in the NSFG codebook:
+      https://www.icpsr.umich.edu/nsfg6/Controller?displayPage=labelDetails&fileCode=FEM&section=R&subSec=7869&srtLabel=606835
+    """
     preg_stat=pregnum.value_counts().sort_index()
     list_of_Npregs=pregnum.unique()
     list_of_Npregs.sort()
@@ -35,7 +41,13 @@ def main(script):
             preg_stat_nsfg.append((i,preg_stat[i]))
         if i>6:
             Npregs_7_95+=preg_stat[i]
-    print("pregnums:\n","\n".join([str(x) for x in preg_stat_nsfg]),"\n7-95 ",Npregs_7_95,"\nTotal = ",Npregs_tot)
+    print("pregnums:")
+    for i in range(0,len(preg_stat_nsfg)):
+        print( preg_stat_nsfg[i][0]," ",preg_stat_nsfg[i][1])
+    print("7-95 ",Npregs_7_95,"\nTotal = ",Npregs_tot)
+
+
+
     dict_toPreg=nsfg.MakePregMap(respdf)
     #print("dict_toPreg",dict_toPreg)
     
